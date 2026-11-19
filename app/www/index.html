@@ -79,6 +79,9 @@ button.licao small{display:block;font-size:18px;font-weight:normal;margin-top:4p
 .sil b{color:var(--hl)}
 .dica{font-size:20px;margin:0;text-align:center}
 @media (max-height:600px){button,.row button{min-height:56px;font-size:22px}.topo button{min-height:44px}main{gap:6px}}
+.cfg{width:100%;display:flex;flex-direction:column;gap:10px;border-top:3px solid var(--line);padding-top:12px}
+.cfg button{min-height:56px;font-size:20px;border-radius:16px}
+.row2 button{font-size:22px}
 </style>
 </head>
 <body>
@@ -156,17 +159,41 @@ function achar(id){for(var k=0;k<LICOES.length;k++){if(LICOES[k].id===id)return 
 
 var lic=null,i=0;
 
-function falar(texto){
+/* ---------- voz (motor de voz nativo do Android, sem internet) ---------- */
+var PITCH=1;                       /* tom da voz (1 = normal) */
+var VEL=[0.6,0.7,0.8,0.9,1.0];     /* velocidades possíveis */
+var VELNOME=["Muito lenta","Lenta","Média","Rápida","Normal"];
+var cfg={v:2};                     /* padrão: Média (0,8), mais pausada que o normal */
+try{var c0=JSON.parse(localStorage.getItem("cfg")||"{}");if(c0&&c0.v>=0&&c0.v<VEL.length)cfg.v=c0.v;}catch(e){}
+function salvarCfg(){try{localStorage.setItem("cfg",JSON.stringify(cfg));}catch(e){}}
+var LENTO=0.6;                     /* "Ouvir devagar" = velocidade atual x 0,6 */
+
+/* Pronúncia de sílabas soltas. O TTS costuma ler "be" ou "bo" de forma estranha.
+   Regra: a -> á, e -> ê, o -> ô (vogais abertas/fechadas como na escola).
+   Se uma sílaba ainda soar estranha no aparelho, corrija aqui. Ex.: FONETICA["ce"]="cê"; */
+var FONETICA={};
+function falaSilaba(sl){
+  var k=sl.toLowerCase();
+  if(FONETICA.hasOwnProperty(k)) return FONETICA[k];
+  var m=/^([bcdfgjlmnprstvxz])([aeo])$/.exec(k);
+  if(m) return m[1]+({a:"á",e:"ê",o:"ô"})[m[2]];
+  return k;
+}
+
+var ultimo="";                     /* última frase falada (para "Ouvir devagar") */
+function falar(texto,lento){
   var m=$("msg");
   if(!synth){ if(m)m.textContent="Este celular não tem voz instalada."; return; }
   if(m)m.textContent="";
   synth.cancel();
   var u=new SpeechSynthesisUtterance(texto);
-  u.lang="pt-BR"; u.rate=0.75; u.pitch=1; u.volume=1;
+  var r=VEL[cfg.v];
+  u.lang="pt-BR"; u.rate=lento?Math.max(0.4,r*LENTO):r; u.pitch=PITCH; u.volume=1;
   var v=synth.getVoices().filter(function(x){return /pt[-_]BR/i.test(x.lang)})[0];
   if(v) u.voice=v;
   synth.speak(u);
 }
+function dizer(t){ultimo=t;falar(t,false);}
 function parar(){if(synth)synth.cancel();}
 
 /* ---------- tela inicial ---------- */
@@ -181,8 +208,17 @@ function home(){
     h+='<button type="button" class="licao" data-id="'+l.id+'"><span class="ic">'+l.icone+'</span>'+
        '<span>'+l.titulo+'<small>'+l.desc+'<br>'+st+'</small></span></button>';
   });
-  h+='</div>';
+  h+='</div>'+
+     '<div class="cfg"><p class="dica">Velocidade da voz: <b id="vel"></b></p>'+
+     '<div class="row"><button type="button" id="vMenos" class="alt">− Mais lenta</button>'+
+     '<button type="button" id="vMais" class="alt">Mais rápida +</button></div>'+
+     '<button type="button" id="vTeste">🔊 Testar a voz</button></div>';
   app.innerHTML=h;
+  function velTxt(){$("vel").textContent=VELNOME[cfg.v];}
+  velTxt();
+  $("vMenos").onclick=function(){if(cfg.v>0)cfg.v--;salvarCfg();velTxt();falar("Esta é a velocidade da voz.",false);};
+  $("vMais").onclick=function(){if(cfg.v<VEL.length-1)cfg.v++;salvarCfg();velTxt();falar("Esta é a velocidade da voz.",false);};
+  $("vTeste").onclick=function(){falar("Olá! Vamos aprender a ler.",false);};
   var bs=app.querySelectorAll("button.licao");
   for(var k=0;k<bs.length;k++){bs[k].onclick=function(){location.hash="#l/"+this.getAttribute("data-id");};}
 }
@@ -208,32 +244,39 @@ function mostrar(){
     meio='<p class="pic">'+p.emoji+'</p><p class="sil">'+h+'</p>';
   }
   var b1,b2;
-  if(p.t==="letra"){b1='🔊 Ouvir a letra';b2='🔊 Ouvir a palavra';}
+  if(p.t==="letra"){b1='🔊 Ouvir a letra';b2='🔊 Palavra';}
   else if(p.t==="silabas"){b1='🔊 Ouvir todas';b2=null;}
-  else{b1='🔊 Ouvir as sílabas';b2='🔊 Ouvir a palavra';}
+  else{b1='🔊 Ouvir as sílabas';b2='🔊 Palavra';}
+  ultimo="";
   app.innerHTML=
     '<div class="topo"><button type="button" id="bHome" class="alt">◀ Início</button><p class="count" id="count">'+lic.rotulo(p,i,n)+'</p></div>'+
     '<div class="meio">'+meio+'<p id="msg"></p></div>'+
     '<div style="width:100%;display:flex;flex-direction:column;gap:16px">'+
       '<button id="bA" type="button">'+b1+'</button>'+
-      (b2?'<button id="bB" type="button" class="alt">'+b2+'</button>':'')+
+      '<div class="row row2">'+(b2?'<button id="bB" type="button" class="alt">'+b2+'</button>':'')+
+        '<button id="bSlow" type="button" class="alt">🐢 Devagar</button></div>'+
       '<div class="row"><button id="bPrev" type="button" class="alt">◀ Voltar</button><button id="bNext" type="button">Próxima ▶</button></div>'+
     '</div>';
   prog[lic.id]=i; salvar();
   $("bHome").onclick=function(){location.hash="";};
   $("bPrev").onclick=function(){i=(i-1+n)%n;parar();mostrar();};
   $("bNext").onclick=function(){i=(i+1)%n;parar();mostrar();};
+  var padrao;
   if(p.t==="letra"){
-    $("bA").onclick=function(){falar("A letra "+NOMES[p.c]+". "+p.c.toLowerCase()+" de "+p.palavra);};
-    $("bB").onclick=function(){falar(p.palavra);};
+    padrao="A letra "+NOMES[p.c]+". "+p.c.toLowerCase()+" de "+p.palavra;
+    $("bA").onclick=function(){dizer(padrao);};
+    $("bB").onclick=function(){dizer(p.palavra);};
   }else if(p.t==="silabas"){
-    $("bA").onclick=function(){falar(p.sil.join(", "));};
+    padrao=p.sil.map(falaSilaba).join(", ");
+    $("bA").onclick=function(){dizer(padrao);};
     var gs=app.querySelectorAll(".grade button");
-    for(var k=0;k<gs.length;k++){gs[k].onclick=function(){falar(p.sil[+this.getAttribute("data-s")]);};}
+    for(var k=0;k<gs.length;k++){gs[k].onclick=function(){dizer(falaSilaba(p.sil[+this.getAttribute("data-s")]));};}
   }else{
-    $("bA").onclick=function(){falar(p.sil.join(", ").toLowerCase());};
-    $("bB").onclick=function(){falar(p.palavra);};
+    padrao=p.sil.map(falaSilaba).join(", ");
+    $("bA").onclick=function(){dizer(padrao);};
+    $("bB").onclick=function(){dizer(p.palavra);};
   }
+  $("bSlow").onclick=function(){falar(ultimo||padrao,true);};
 }
 
 /* ---------- rotas (o botão Voltar do Android usa isto) ---------- */
