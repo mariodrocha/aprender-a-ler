@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Aprender a Ler</title>
+<style>
+:root{
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  --bg:#ffffff; --fg:#111111; --btn:#0b3d91; --btn-fg:#ffffff; --btn2:#2e2e2e; --hl:#c62828; --line:#111111;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#000000; --fg:#ffffff; --btn:#ffd600; --btn-fg:#000000; --btn2:#e0e0e0; --hl:#ffd600; --line:#ffffff;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#000000; --fg:#ffffff; --btn:#ffd600; --btn-fg:#000000; --btn2:#e0e0e0; --hl:#ffd600; --line:#ffffff;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{
+  background:var(--bg); color:var(--fg);
+  font-family:Verdana,Arial,Helvetica,sans-serif;
+  -webkit-tap-highlight-color:transparent;
+  user-select:none;
+}
+main{
+  min-height:100%;
+  display:flex; flex-direction:column; align-items:center; justify-content:space-between;
+  gap:16px;
+  padding:20px 28px 28px; /* margem segura: dedos não esbarram nas bordas */
+  max-width:600px; margin:0 auto;
+}
+.count{font-size:22px;font-weight:bold;margin:0}
+.letter{
+  font-size:clamp(110px,42vw,230px); font-weight:bold; line-height:1; margin:0;
+  letter-spacing:.05em; text-align:center;
+}
+.pic{font-size:clamp(70px,22vw,120px);line-height:1;margin:0}
+.word{font-size:clamp(46px,14vw,84px);font-weight:bold;margin:0;text-align:center}
+.word b{color:var(--hl)}
+button{
+  font:inherit; font-weight:bold; border:0; border-radius:24px;
+  min-height:84px; width:100%; font-size:30px;
+  background:var(--btn); color:var(--btn-fg);
+  cursor:pointer; touch-action:manipulation;
+}
+button:active{outline:6px solid var(--line)}
+button:focus-visible{outline:6px solid var(--line)}
+button.alt{background:var(--btn2);color:var(--bg)}
+.row{display:flex;gap:16px;width:100%}
+.row button{min-height:84px;font-size:28px}
+#msg{font-size:20px;text-align:center;margin:0;min-height:1em}
+</style>
+</head>
+<body>
+<main>
+  <p class="count" id="count"></p>
+  <p class="letter" id="letter" aria-live="polite"></p>
+  <p class="pic" id="pic"></p>
+  <p class="word" id="word"></p>
+  <p id="msg"></p>
+  <div style="width:100%;display:flex;flex-direction:column;gap:16px">
+    <button id="bLetter" type="button">🔊 Ouvir a letra</button>
+    <button id="bWord" type="button" class="alt">🔊 Ouvir a palavra</button>
+    <div class="row">
+      <button id="bPrev" type="button" class="alt">◀ Voltar</button>
+      <button id="bNext" type="button">Próxima ▶</button>
+    </div>
+  </div>
+</main>
+<script>
+var DATA=[
+["A","Abelha","🐝"],["B","Bola","⚽"],["C","Casa","🏠"],["D","Dado","🎲"],["E","Escola","🏫"],
+["F","Flor","🌸"],["G","Gato","🐱"],["H","Hotel","🏨"],["I","Igreja","⛪"],["J","Janela","🪟"],
+["K","Kiwi","🥝"],["L","Lua","🌙"],["M","Maçã","🍎"],["N","Navio","🚢"],["O","Ovo","🥚"],
+["P","Pato","🦆"],["Q","Queijo","🧀"],["R","Rato","🐭"],["S","Sol","☀️"],["T","Tomate","🍅"],
+["U","Uva","🍇"],["V","Vaca","🐄"],["W","Waffle","🧇"],["X","Xícara","☕"],["Y","Yoga","🧘"],["Z","Zebra","🦓"]
+];
+var NOMES={A:"a",B:"bê",C:"cê",D:"dê",E:"é",F:"éfe",G:"guê",H:"agá",I:"i",J:"jota",K:"cá",L:"éle",M:"ême",N:"êne",O:"ó",P:"pê",Q:"quê",R:"érre",S:"ésse",T:"tê",U:"u",V:"vê",W:"dáblio",X:"xis",Y:"ípsilon",Z:"zê"};
+var i=0;
+try{var s=parseInt(localStorage.getItem("idx"),10); if(s>=0&&s<DATA.length) i=s;}catch(e){}
+
+var $=function(id){return document.getElementById(id)};
+var synth=window.speechSynthesis;
+
+function falar(texto){
+  if(!synth){ $("msg").textContent="Este celular não tem voz instalada."; return; }
+  $("msg").textContent="";
+  synth.cancel();
+  var u=new SpeechSynthesisUtterance(texto);
+  u.lang="pt-BR"; u.rate=0.75; u.pitch=1; u.volume=1;
+  var v=synth.getVoices().filter(function(x){return /pt[-_]BR/i.test(x.lang)})[0];
+  if(v) u.voice=v;
+  synth.speak(u);
+}
+function mostrar(){
+  var d=DATA[i], L=d[0], w=d[1];
+  $("count").textContent="Letra "+(i+1)+" de "+DATA.length;
+  $("letter").textContent=L+" "+L.toLowerCase();
+  $("pic").textContent=d[2];
+  $("word").innerHTML="<b>"+w.charAt(0)+"</b>"+w.slice(1);
+  try{localStorage.setItem("idx",String(i));}catch(e){}
+}
+$("bLetter").onclick=function(){
+  var d=DATA[i]; falar("A letra "+NOMES[d[0]]+". "+d[0].toLowerCase()+" de "+d[1]);
+};
+$("bWord").onclick=function(){ falar(DATA[i][1]); };
+$("bNext").onclick=function(){ i=(i+1)%DATA.length; mostrar(); if(synth)synth.cancel(); };
+$("bPrev").onclick=function(){ i=(i-1+DATA.length)%DATA.length; mostrar(); if(synth)synth.cancel(); };
+if(synth&&synth.onvoiceschanged!==undefined){synth.onvoiceschanged=function(){};}
+mostrar();
+</script>
+</body>
+</html>
