@@ -181,20 +181,39 @@ function falaSilaba(sl){
 }
 
 var ultimo="";                     /* última frase falada (para "Ouvir devagar") */
+var MSG_SEM_VOZ="Sem voz em português. No Android: Configurações > Idioma > Saída de texto para voz > instalar a voz pt-BR.";
+function aviso(t){var m=$("msg");if(m)m.textContent=t||"";}
+
+/* No app instalado a voz vem do plugin nativo (TextToSpeech do Capacitor).
+   O WebView do Android NÃO tem speechSynthesis; ele só existe no navegador (usado nos testes no PC). */
+var TTS=null;
+try{
+  if(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform()){
+    TTS=(Capacitor.Plugins&&Capacitor.Plugins.TextToSpeech)||(Capacitor.registerPlugin&&Capacitor.registerPlugin("TextToSpeech"))||null;
+  }
+}catch(e){TTS=null;}
+
 function falar(texto,lento){
-  var m=$("msg");
-  if(!synth){ if(m)m.textContent="Este celular não tem voz instalada."; return; }
-  if(m)m.textContent="";
+  var r=VEL[cfg.v], taxa=lento?Math.max(0.4,r*LENTO):r;
+  aviso("");
+  if(TTS){
+    TTS.speak({text:texto,lang:"pt-BR",rate:taxa,pitch:PITCH,volume:1.0,category:"ambient"})
+      .catch(function(err){aviso(MSG_SEM_VOZ);});
+    return;
+  }
+  if(!synth){aviso("Este aparelho não tem voz instalada.");return;}
   synth.cancel();
   var u=new SpeechSynthesisUtterance(texto);
-  var r=VEL[cfg.v];
-  u.lang="pt-BR"; u.rate=lento?Math.max(0.4,r*LENTO):r; u.pitch=PITCH; u.volume=1;
+  u.lang="pt-BR"; u.rate=taxa; u.pitch=PITCH; u.volume=1;
   var v=synth.getVoices().filter(function(x){return /pt[-_]BR/i.test(x.lang)})[0];
   if(v) u.voice=v;
   synth.speak(u);
 }
 function dizer(t){ultimo=t;falar(t,false);}
-function parar(){if(synth)synth.cancel();}
+function parar(){
+  if(TTS){try{TTS.stop().catch(function(){});}catch(e){}}
+  else if(synth)synth.cancel();
+}
 
 /* ---------- tela inicial ---------- */
 function home(){

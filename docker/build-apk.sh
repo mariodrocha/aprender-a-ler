@@ -3,7 +3,7 @@
 set -e
 trap 'chown -R "$HOST_UID:$HOST_GID" /projeto/app /projeto/saida /projeto/chave 2>/dev/null || true' EXIT
 cd /projeto/app
-[ -d node_modules ] || npm install
+npm install
 [ -d android ] || npx cap add android
 npx cap sync android
 cd android
