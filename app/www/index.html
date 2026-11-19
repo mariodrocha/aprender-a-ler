@@ -63,26 +63,40 @@ button.alt{background:var(--btn2);color:var(--bg)}
   button,.row button{min-height:64px;font-size:24px;border-radius:18px}
   .count{font-size:18px}
 }
+
+h1{font-size:clamp(34px,10vw,52px);margin:0;text-align:center}
+.sub{font-size:22px;margin:0;text-align:center}
+.lista{width:100%;display:flex;flex-direction:column;gap:16px}
+button.licao{display:flex;align-items:center;gap:16px;text-align:left;padding:14px 20px;font-size:26px;min-height:104px}
+button.licao .ic{font-size:52px;line-height:1}
+button.licao small{display:block;font-size:18px;font-weight:normal;margin-top:4px}
+.topo{width:100%;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.topo button{width:auto;min-height:52px;font-size:20px;padding:0 18px;border-radius:16px}
+.meio{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;width:100%}
+.grade{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;width:100%}
+.grade button{min-height:clamp(64px,12vh,96px);font-size:clamp(34px,min(12vw,7vh),60px);text-transform:none}
+.sil{font-size:clamp(44px,min(15vw,9vh),90px);font-weight:bold;margin:0;text-align:center;white-space:nowrap}
+.sil b{color:var(--hl)}
+.dica{font-size:20px;margin:0;text-align:center}
+@media (max-height:600px){button,.row button{min-height:56px;font-size:22px}.topo button{min-height:44px}main{gap:6px}}
 </style>
 </head>
 <body>
-<main>
-  <p class="count" id="count"></p>
-  <p class="letter" id="letter" aria-live="polite"></p>
-  <p class="pic" id="pic"></p>
-  <p class="word" id="word"></p>
-  <p id="msg"></p>
-  <div style="width:100%;display:flex;flex-direction:column;gap:16px">
-    <button id="bLetter" type="button">🔊 Ouvir a letra</button>
-    <button id="bWord" type="button" class="alt">🔊 Ouvir a palavra</button>
-    <div class="row">
-      <button id="bPrev" type="button" class="alt">◀ Voltar</button>
-      <button id="bNext" type="button">Próxima ▶</button>
-    </div>
-  </div>
-</main>
+<main id="app"></main>
 <script>
-var DATA=[
+/* ===================================================================
+   COMO ADICIONAR UMA LIÇÃO NOVA
+   1) Crie um objeto em LICOES (no fim da lista) com: id, icone, titulo,
+      desc, passos (lista de telas) e rotulo (texto do contador).
+   2) Cada passo é de um tipo:
+        {t:"letra",   c:"A", palavra:"Abelha", emoji:"🐝"}
+        {t:"silabas", c:"B", sil:["ba","be","bi","bo","bu"]}
+        {t:"palavra", c:"B", sil:["Bo","la"], palavra:"Bola", emoji:"⚽"}
+   3) Salve e rode:  bash construir.sh
+   =================================================================== */
+
+/* ---------- Lição 1: o alfabeto ---------- */
+var ALFA=[
 ["A","Abelha","🐝"],["B","Bola","⚽"],["C","Casa","🏠"],["D","Dado","🎲"],["E","Escola","🏫"],
 ["F","Flor","🌸"],["G","Gato","🐱"],["H","Hotel","🏨"],["I","Igreja","⛪"],["J","Janela","🪟"],
 ["K","Kiwi","🥝"],["L","Lua","🌙"],["M","Maçã","🍎"],["N","Navio","🚢"],["O","Ovo","🥚"],
@@ -90,15 +104,62 @@ var DATA=[
 ["U","Uva","🍇"],["V","Vaca","🐄"],["W","Waffle","🧇"],["X","Xícara","☕"],["Y","Yoga","🧘"],["Z","Zebra","🦓"]
 ];
 var NOMES={A:"a",B:"bê",C:"cê",D:"dê",E:"é",F:"éfe",G:"guê",H:"agá",I:"i",J:"jota",K:"cá",L:"éle",M:"ême",N:"êne",O:"ó",P:"pê",Q:"quê",R:"érre",S:"ésse",T:"tê",U:"u",V:"vê",W:"dáblio",X:"xis",Y:"ípsilon",Z:"zê"};
-var i=0;
-try{var s=parseInt(localStorage.getItem("idx"),10); if(s>=0&&s<DATA.length) i=s;}catch(e){}
+var passos1=ALFA.map(function(d){return {t:"letra",c:d[0],palavra:d[1],emoji:d[2]};});
 
+/* ---------- Lição 2: consoante + vogal, depois palavras ---------- */
+/* [consoante, vogais, [["Si-la-bas","emoji"], ...]] */
+var SILABAS=[
+["B","aeiou",[["Bo-la","⚽"],["Be-bê","👶"],["Bo-ca","👄"],["Bo-ta","🥾"]]],
+["C","aeiou",[["Ca-sa","🏠"],["Co-po","🥛"],["Ce-bo-la","🧅"],["Cu-bo","🧊"]]],
+["D","aeiou",[["Da-do","🎲"],["De-do","👆"],["Do-ce","🍬"]]],
+["F","aeiou",[["Fo-ca","🦭"],["Fa-da","🧚"],["Fo-go","🔥"],["Fi-ta","🎀"]]],
+["G","aeiou",[["Ga-to","🐱"],["Ge-lo","🧊"],["Gi-ra-fa","🦒"],["Go-ta","💧"]]],
+["J","aeiou",[["Ja-ne-la","🪟"],["Ji-pe","🚙"],["Jo-go","🎮"],["Ja-ca-ré","🐊"]]],
+["L","aeiou",[["Lu-a","🌙"],["La-ta","🥫"],["Lo-bo","🐺"],["Lu-la","🦑"]]],
+["M","aeiou",[["Ma-la","🧳"],["Me-sa","🪑"],["Mi-co","🐒"],["Mo-to","🏍️"]]],
+["N","aeiou",[["No-ta","🎵"],["Ne-ve","❄️"],["Na-ve","🚀"]]],
+["P","aeiou",[["Pa-to","🦆"],["Pe-ra","🍐"],["Pi-pa","🪁"],["Po-te","🫙"]]],
+["R","aeiou",[["Ra-to","🐭"],["Ro-da","🛞"],["Re-na","🦌"],["Ru-a","🛣️"]]],
+["S","aeiou",[["Sa-po","🐸"],["Si-no","🔔"],["So-pa","🍲"],["Su-co","🧃"]]],
+["T","aeiou",[["To-ma-te","🍅"],["Tu-ba","🎺"],["Ti-jo-lo","🧱"]]],
+["V","aeiou",[["Va-ca","🐄"],["Ve-la","🕯️"],["Vo-vó","👵"],["Va-so","🏺"]]],
+["X","aeiou",[["Xa-le","🧣"],["Xí-ca-ra","☕"],["Xu-xu","🥒"]]]
+];
+var passos2=[];
+SILABAS.forEach(function(g){
+  var c=g[0];
+  passos2.push({t:"silabas",c:c,sil:g[1].split("").map(function(v){return c.toLowerCase()+v;})});
+  g[2].forEach(function(w){
+    var s=w[0].split("-");
+    passos2.push({t:"palavra",c:c,sil:s,palavra:s.join(""),emoji:w[1]});
+  });
+});
+
+/* ---------- Lista de lições (a ordem aqui é a ordem na tela inicial) ---------- */
+var LICOES=[
+ {id:"alfabeto",icone:"🔤",titulo:"Lição 1 · O alfabeto",desc:"Conhecer as letras de A a Z",passos:passos1,
+  rotulo:function(p,i,n){return "Letra "+(i+1)+" de "+n;},
+  tecla:function(k){var n=k.toUpperCase().charCodeAt(0)-65;return (n>=0&&n<26)?n:-1;}},
+ {id:"silabas",icone:"🧩",titulo:"Lição 2 · Sílabas e palavras",desc:"Juntar consoante e vogal: BA BE BI BO BU",passos:passos2,
+  rotulo:function(p,i,n){return "Letra "+p.c+" · "+(i+1)+" de "+n;},
+  tecla:function(k){k=k.toUpperCase();for(var j=0;j<passos2.length;j++){if(passos2[j].c===k)return j;}return -1;}}
+];
+
+/* ================= código do app ================= */
 var $=function(id){return document.getElementById(id)};
+var app=$("app");
 var synth=window.speechSynthesis;
+var prog={};
+try{prog=JSON.parse(localStorage.getItem("prog")||"{}")||{};}catch(e){prog={};}
+function salvar(){try{localStorage.setItem("prog",JSON.stringify(prog));}catch(e){}}
+function achar(id){for(var k=0;k<LICOES.length;k++){if(LICOES[k].id===id)return LICOES[k];}return null;}
+
+var lic=null,i=0;
 
 function falar(texto){
-  if(!synth){ $("msg").textContent="Este celular não tem voz instalada."; return; }
-  $("msg").textContent="";
+  var m=$("msg");
+  if(!synth){ if(m)m.textContent="Este celular não tem voz instalada."; return; }
+  if(m)m.textContent="";
   synth.cancel();
   var u=new SpeechSynthesisUtterance(texto);
   u.lang="pt-BR"; u.rate=0.75; u.pitch=1; u.volume=1;
@@ -106,33 +167,98 @@ function falar(texto){
   if(v) u.voice=v;
   synth.speak(u);
 }
-function mostrar(){
-  var d=DATA[i], L=d[0], w=d[1];
-  $("count").textContent="Letra "+(i+1)+" de "+DATA.length;
-  $("letter").textContent=L+" "+L.toLowerCase();
-  $("pic").textContent=d[2];
-  $("word").innerHTML="<b>"+w.charAt(0)+"</b>"+w.slice(1);
-  try{localStorage.setItem("idx",String(i));}catch(e){}
+function parar(){if(synth)synth.cancel();}
+
+/* ---------- tela inicial ---------- */
+function home(){
+  lic=null; parar();
+  var h='<div></div><div style="width:100%;display:flex;flex-direction:column;gap:12px;align-items:center">'+
+        '<h1>📖 Aprender a Ler</h1><p class="sub">Escolha uma lição</p></div>'+
+        '<div class="lista">';
+  LICOES.forEach(function(l){
+    var n=l.passos.length, a=prog[l.id]||0;
+    var st=a>0?("Continuar: "+(a+1)+" de "+n):("Começar · "+n+" telas");
+    h+='<button type="button" class="licao" data-id="'+l.id+'"><span class="ic">'+l.icone+'</span>'+
+       '<span>'+l.titulo+'<small>'+l.desc+'<br>'+st+'</small></span></button>';
+  });
+  h+='</div>';
+  app.innerHTML=h;
+  var bs=app.querySelectorAll("button.licao");
+  for(var k=0;k<bs.length;k++){bs[k].onclick=function(){location.hash="#l/"+this.getAttribute("data-id");};}
 }
-$("bLetter").onclick=function(){
-  var d=DATA[i]; falar("A letra "+NOMES[d[0]]+". "+d[0].toLowerCase()+" de "+d[1]);
-};
-$("bWord").onclick=function(){ falar(DATA[i][1]); };
-$("bNext").onclick=function(){ i=(i+1)%DATA.length; mostrar(); if(synth)synth.cancel(); };
-$("bPrev").onclick=function(){ i=(i-1+DATA.length)%DATA.length; mostrar(); if(synth)synth.cancel(); };
-if(synth&&synth.onvoiceschanged!==undefined){synth.onvoiceschanged=function(){};}
+
+/* ---------- tela de uma lição ---------- */
+function abrir(l){
+  lic=l;
+  var s=prog[l.id]||0; i=(s>=0&&s<l.passos.length)?s:0;
+  mostrar();
+}
+function mostrar(){
+  var p=lic.passos[i], n=lic.passos.length, meio="";
+  if(p.t==="letra"){
+    meio='<p class="letter">'+p.c+' '+p.c.toLowerCase()+'</p><p class="pic">'+p.emoji+'</p>'+
+         '<p class="word"><b>'+p.palavra.charAt(0)+'</b>'+p.palavra.slice(1)+'</p>';
+  }else if(p.t==="silabas"){
+    meio='<p class="dica">Toque para ouvir</p><div class="grade">';
+    p.sil.forEach(function(s,k){meio+='<button type="button" data-s="'+k+'">'+s+'</button>';});
+    meio+='</div>';
+  }else if(p.t==="palavra"){
+    var cc=p.c.toLowerCase();
+    var h=p.sil.map(function(s){return s.charAt(0).toLowerCase()===cc?'<b>'+s+'</b>':s;}).join("-");
+    meio='<p class="pic">'+p.emoji+'</p><p class="sil">'+h+'</p>';
+  }
+  var b1,b2;
+  if(p.t==="letra"){b1='🔊 Ouvir a letra';b2='🔊 Ouvir a palavra';}
+  else if(p.t==="silabas"){b1='🔊 Ouvir todas';b2=null;}
+  else{b1='🔊 Ouvir as sílabas';b2='🔊 Ouvir a palavra';}
+  app.innerHTML=
+    '<div class="topo"><button type="button" id="bHome" class="alt">◀ Início</button><p class="count" id="count">'+lic.rotulo(p,i,n)+'</p></div>'+
+    '<div class="meio">'+meio+'<p id="msg"></p></div>'+
+    '<div style="width:100%;display:flex;flex-direction:column;gap:16px">'+
+      '<button id="bA" type="button">'+b1+'</button>'+
+      (b2?'<button id="bB" type="button" class="alt">'+b2+'</button>':'')+
+      '<div class="row"><button id="bPrev" type="button" class="alt">◀ Voltar</button><button id="bNext" type="button">Próxima ▶</button></div>'+
+    '</div>';
+  prog[lic.id]=i; salvar();
+  $("bHome").onclick=function(){location.hash="";};
+  $("bPrev").onclick=function(){i=(i-1+n)%n;parar();mostrar();};
+  $("bNext").onclick=function(){i=(i+1)%n;parar();mostrar();};
+  if(p.t==="letra"){
+    $("bA").onclick=function(){falar("A letra "+NOMES[p.c]+". "+p.c.toLowerCase()+" de "+p.palavra);};
+    $("bB").onclick=function(){falar(p.palavra);};
+  }else if(p.t==="silabas"){
+    $("bA").onclick=function(){falar(p.sil.join(", "));};
+    var gs=app.querySelectorAll(".grade button");
+    for(var k=0;k<gs.length;k++){gs[k].onclick=function(){falar(p.sil[+this.getAttribute("data-s")]);};}
+  }else{
+    $("bA").onclick=function(){falar(p.sil.join(", ").toLowerCase());};
+    $("bB").onclick=function(){falar(p.palavra);};
+  }
+}
+
+/* ---------- rotas (o botão Voltar do Android usa isto) ---------- */
+function rota(){
+  var m=/^#l\/(.+)$/.exec(location.hash||"");
+  var l=m?achar(m[1]):null;
+  if(l)abrir(l); else home();
+}
+window.addEventListener("hashchange",rota);
+
+/* ---------- teclado físico ---------- */
 document.addEventListener("keydown",function(e){
-  if(e.ctrlKey||e.altKey||e.metaKey) return;
-  var k=e.key;
+  if(e.ctrlKey||e.altKey||e.metaKey||!lic) return;
+  var k=e.key, n=lic.passos.length;
   if(/^[a-zA-Z]$/.test(k)){
-    var n=k.toUpperCase().charCodeAt(0)-65;
-    if(n>=0&&n<DATA.length){ i=n; mostrar(); $("bLetter").click(); }
-  } else if(k==="ArrowRight"){ $("bNext").click(); }
-  else if(k==="ArrowLeft"){ $("bPrev").click(); }
-  else if(k==="Enter"){ e.preventDefault(); $("bLetter").click(); }
-  else if(k===" "){ e.preventDefault(); $("bWord").click(); }
+    var j=lic.tecla?lic.tecla(k):-1;
+    if(j>=0){i=j;mostrar();$("bA").click();}
+  }else if(k==="ArrowRight"){$("bNext").click();}
+  else if(k==="ArrowLeft"){$("bPrev").click();}
+  else if(k==="Enter"){e.preventDefault();$("bA").click();}
+  else if(k===" "){e.preventDefault();var b=$("bB")||$("bA");b.click();}
+  else if(k==="Escape"){location.hash="";}
 });
-mostrar();
+if(synth&&synth.onvoiceschanged!==undefined){synth.onvoiceschanged=function(){};}
+rota();
 </script>
 </body>
 </html>
