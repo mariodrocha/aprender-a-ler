@@ -24,27 +24,28 @@
 }
 *{box-sizing:border-box}
 html,body{height:100%;margin:0}
-main{min-height:100dvh}
 body{
   background:var(--bg); color:var(--fg);
   font-family:Verdana,Arial,Helvetica,sans-serif;
   -webkit-tap-highlight-color:transparent;
-  user-select:none;
+  user-select:none; -webkit-user-select:none;
 }
 main{
   min-height:100%;
   display:flex; flex-direction:column; align-items:center; justify-content:space-between;
-  gap:16px;
-  padding:20px 28px 28px; /* margem segura: dedos não esbarram nas bordas */
+  gap:12px;
+  padding:16px 24px 20px; /* margem segura: dedos não esbarram nas bordas */
   max-width:600px; margin:0 auto;
 }
-.count{font-size:22px;font-weight:bold;margin:0}
+p{margin:0}
+.count{font-size:20px;font-weight:bold;text-align:right}
 .letter{
-  font-size:clamp(80px,min(28vw,20vh),200px); font-weight:bold; line-height:1; margin:0;
+  font-size:clamp(80px,min(28vw,20vh),200px); font-weight:bold; line-height:1;
   letter-spacing:.02em; text-align:center; white-space:nowrap; max-width:100%;
 }
-.pic{font-size:clamp(56px,min(20vw,11vh),110px);line-height:1;margin:0}
-.word{font-size:clamp(40px,min(13vw,8vh),80px);white-space:nowrap;font-weight:bold;margin:0;text-align:center}
+.pic{font-size:clamp(56px,min(20vw,11vh),110px);line-height:1;text-align:center}
+.pic.pq{font-size:clamp(30px,min(9vw,6vh),46px);line-height:1.15;white-space:pre-line}
+.word{font-size:clamp(40px,min(13vw,8vh),80px);white-space:nowrap;font-weight:bold;text-align:center}
 .word b{color:var(--hl)}
 button{
   font:inherit; font-weight:bold; border:0; border-radius:24px;
@@ -57,31 +58,70 @@ button:focus-visible{outline:6px solid var(--line)}
 button.alt{background:var(--btn2);color:var(--bg)}
 .row{display:flex;gap:16px;width:100%}
 .row button{min-height:84px;font-size:28px}
-#msg{font-size:20px;text-align:center;margin:0;min-height:1em}
-@media (max-height:720px){
-  main{gap:8px;padding:12px 24px 16px}
-  button,.row button{min-height:64px;font-size:24px;border-radius:18px}
-  .count{font-size:18px}
-}
+.row2 button{font-size:22px}
+#msg{font-size:18px;text-align:center;min-height:1em}
 
-h1{font-size:clamp(34px,10vw,52px);margin:0;text-align:center}
-.sub{font-size:22px;margin:0;text-align:center}
-.lista{width:100%;display:flex;flex-direction:column;gap:16px}
-button.licao{display:flex;align-items:center;gap:16px;text-align:left;padding:14px 20px;font-size:26px;min-height:104px}
-button.licao .ic{font-size:52px;line-height:1}
-button.licao small{display:block;font-size:18px;font-weight:normal;margin-top:4px}
+/* ----- tela inicial (compacta) ----- */
+h1{font-size:clamp(24px,7vw,34px);text-align:center}
+.sub{font-size:17px;text-align:center}
+.grade2{width:100%;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+button.licao{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  min-height:84px;padding:8px 6px;gap:2px;border-radius:18px;line-height:1.15;text-align:center
+}
+button.licao .ic{font-size:30px;line-height:1}
+button.licao .n{font-size:13px;font-weight:normal}
+button.licao .t{font-size:18px}
+.cfg{width:100%;display:flex;align-items:center;gap:8px;border-top:3px solid var(--line);padding-top:10px}
+.cfg button{width:52px;min-height:48px;font-size:24px;border-radius:14px;padding:0}
+.cfg span{flex:1;text-align:center;font-size:16px}
+.cfg b{display:block;font-size:18px}
+
+/* ----- dentro das lições ----- */
 .topo{width:100%;display:flex;align-items:center;justify-content:space-between;gap:12px}
 .topo button{width:auto;min-height:52px;font-size:20px;padding:0 18px;border-radius:16px}
 .meio{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;width:100%}
 .grade{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;width:100%}
-.grade button{min-height:clamp(64px,12vh,96px);font-size:clamp(34px,min(12vw,7vh),60px);text-transform:none}
-.sil{font-size:clamp(44px,min(15vw,9vh),90px);font-weight:bold;margin:0;text-align:center;white-space:nowrap}
+.grade button{min-height:clamp(64px,12vh,96px);font-size:clamp(34px,min(12vw,7vh),60px)}
+.sil{font-size:clamp(44px,min(15vw,9vh),90px);font-weight:bold;text-align:center;white-space:nowrap}
 .sil b{color:var(--hl)}
-.dica{font-size:20px;margin:0;text-align:center}
-@media (max-height:600px){button,.row button{min-height:56px;font-size:22px}.topo button{min-height:44px}main{gap:6px}}
-.cfg{width:100%;display:flex;flex-direction:column;gap:10px;border-top:3px solid var(--line);padding-top:12px}
-.cfg button{min-height:56px;font-size:20px;border-radius:16px}
-.row2 button{font-size:22px}
+.dica{font-size:18px;text-align:center}
+.grande{font-weight:bold;text-align:center;white-space:nowrap;line-height:1.05}
+.leg{font-size:clamp(26px,8vw,40px);text-align:center}
+.placa{border:6px solid var(--line);border-radius:16px;padding:14px 18px;font-weight:bold;text-align:center;white-space:nowrap;max-width:100%}
+.nm{font-weight:bold;text-align:center;white-space:nowrap}
+.nm span{display:inline-block;padding:0 .04em;border-radius:8px}
+.nm span.on{background:var(--hl);color:var(--bg)}
+.nm2{font-size:clamp(24px,7vw,34px);text-align:center}
+.sb{display:inline-block;border:4px solid var(--line);border-radius:16px;padding:4px 10px;margin:0 4px;
+    transition:margin .45s,padding .45s,border-color .45s;cursor:pointer}
+.un .sb{border-color:transparent;margin:0;padding:4px 0}
+.fr{display:flex;flex-wrap:wrap;justify-content:center;gap:6px 4px;width:100%}
+.pal{display:inline-block;font-weight:bold;font-size:clamp(30px,min(9.5vw,6vh),52px);padding:2px 10px;border-radius:12px;cursor:pointer}
+.pal.on{background:var(--hl);color:var(--bg)}
+textarea{
+  width:100%;font:inherit;font-size:24px;padding:12px;border:4px solid var(--line);border-radius:16px;
+  background:var(--bg);color:var(--fg);user-select:text;-webkit-user-select:text;resize:none
+}
+@media (max-height:720px){
+  main{gap:8px;padding:12px 24px 16px}
+  button,.row button{min-height:64px;font-size:24px;border-radius:18px}
+  .row2 button{font-size:20px}
+  .count{font-size:18px}
+}
+@media (max-height:600px){
+  button.licao{min-height:62px}
+  button.licao .ic{font-size:24px}
+  h1{font-size:22px}
+  .sub{font-size:15px}
+  button,.row button{min-height:56px;font-size:22px}
+  .topo button{min-height:44px}
+  main{gap:6px}
+}
+@media (max-height:720px){
+  button.licao{min-height:72px}
+  .cfg button{min-height:44px}
+}
 </style>
 </head>
 <body>
@@ -89,12 +129,16 @@ button.licao small{display:block;font-size:18px;font-weight:normal;margin-top:4p
 <script>
 /* ===================================================================
    COMO ADICIONAR UMA LIÇÃO NOVA
-   1) Crie um objeto em LICOES (no fim da lista) com: id, icone, titulo,
-      desc, passos (lista de telas) e rotulo (texto do contador).
-   2) Cada passo é de um tipo:
+   1) Crie um objeto em LICOES (no fim da lista) com: id, icone, curto
+      (nome curto do menu), passos (telas) e rotulo (texto do contador).
+   2) Tipos de passo:
         {t:"letra",   c:"A", palavra:"Abelha", emoji:"🐝"}
         {t:"silabas", c:"B", sil:["ba","be","bi","bo","bu"]}
         {t:"palavra", c:"B", sil:["Bo","la"], palavra:"Bola", emoji:"⚽"}
+        {t:"juntar",  grupo:"...", sil:["Bo","la"], palavra:"Bola", emoji:"⚽"}
+        {t:"cartao",  grupo:"...", grande:"R$ 5,00", legenda:"cinco reais",
+                      fala:"cinco reais", pic:"🥛", placa:false, pq:false}
+        {t:"frase",   grupo:"...", palavras:["O","sol","é","quente."]}
    3) Salve e rode:  bash construir.sh
    =================================================================== */
 
@@ -110,7 +154,6 @@ var NOMES={A:"a",B:"bê",C:"cê",D:"dê",E:"é",F:"éfe",G:"guê",H:"agá",I:"i"
 var passos1=ALFA.map(function(d){return {t:"letra",c:d[0],palavra:d[1],emoji:d[2]};});
 
 /* ---------- Lição 2: consoante + vogal, depois palavras ---------- */
-/* [consoante, vogais, [["Si-la-bas","emoji"], ...]] */
 var SILABAS=[
 ["B","aeiou",[["Bo-la","⚽"],["Be-bê","👶"],["Bo-ca","👄"],["Bo-ta","🥾"]]],
 ["C","aeiou",[["Ca-sa","🏠"],["Co-po","🥛"],["Ce-bo-la","🧅"],["Cu-bo","🧊"]]],
@@ -138,14 +181,95 @@ SILABAS.forEach(function(g){
   });
 });
 
+/* ---------- Lição 3: meu nome (dinâmica: nomes cadastrados no aparelho) ---------- */
+function lerNomes(){
+  try{var a=JSON.parse(localStorage.getItem("nomes")||"[]");if(a&&a.length)return a;}catch(e){}
+  return [];
+}
+function gerarNomes(){
+  var a=lerNomes();
+  if(!a.length) return [{t:"vazio"}];
+  return a.map(function(n){return {t:"nome",nome:n};});
+}
+
+/* ---------- Lição 4: formar palavras (juntar as sílabas) ---------- */
+var JUNTAR=[
+["Bo-la","⚽"],["Ca-sa","🏠"],["Ga-to","🐱"],["Pa-to","🦆"],["Lu-a","🌙"],["U-va","🍇"],["Sa-po","🐸"],["Fa-ca","🔪"],
+["Ma-la","🧳"],["Co-po","🥛"],["De-do","👆"],["Ve-la","🕯️"],["Ba-ta-ta","🥔"],["Ca-ne-ca","☕"]
+];
+var JUNTAR2=[ /* sílabas mais difíceis (LH, NH, RR) ficam para o fim */
+["A-be-lha","🐝"],["Ga-li-nha","🐔"],["Ba-nho","🛁"],["Ca-ne-la","🌿"],["Car-ro","🚗"],["Ter-ra","🌍"]
+];
+var passos4=[];
+JUNTAR.concat(JUNTAR2).forEach(function(w,k){
+  var s=w[0].split("-");
+  passos4.push({t:"juntar",grupo:k<JUNTAR.length?"Sílabas simples":"Sílabas difíceis",sil:s,palavra:s.join(""),emoji:w[1]});
+});
+
+/* ---------- Lição 5: palavras do dia a dia (leitura da palavra inteira) ---------- */
+var DIA=[
+["No mercado","MERCADO","🛒"],["No mercado","PREÇO","🏷️"],["No mercado","FEIRA","🥬"],
+["Na saúde","FARMÁCIA","🏥"],["Na saúde","REMÉDIO","💊"],
+["Na rua","ÔNIBUS","🚌"],["Na rua","BANCO","🏦"],["Na rua","IGREJA","⛪"],
+["Em todo lugar","SAÍDA","🚪"],["Em todo lugar","BANHEIRO","🚻"]
+];
+var passos5=DIA.map(function(d){return {t:"cartao",grupo:d[0],grande:d[1],fala:d[1].toLowerCase(),pic:d[2],placa:true};});
+
+/* ---------- Lição 6: números, dinheiro e horas ---------- */
+var NUM=["zero","um","dois","três","quatro","cinco","seis","sete","oito","nove"];
+function estrelas(n){
+  if(n===0)return "⭕";
+  var s="";for(var k=1;k<=n;k++){s+="⭐";if(k%5===0&&k<n)s+="\n";}
+  return s;
+}
+var passos6=[];
+for(var dg=0;dg<10;dg++){
+  passos6.push({t:"cartao",grupo:"Números",grande:String(dg),legenda:NUM[dg],fala:NUM[dg],pic:estrelas(dg),pq:true});
+}
+[["R$ 1,00","um real","🍞"],["R$ 3,50","três reais e cinquenta centavos","🍌"],["R$ 5,00","cinco reais","🥛"],
+ ["R$ 8,50","oito reais e cinquenta centavos","💊"],["R$ 12,00","doze reais","🥚"],["R$ 20,00","vinte reais","🍗"]
+].forEach(function(x){
+  passos6.push({t:"cartao",grupo:"Preços",grande:x[0],legenda:x[1],fala:x[1],pic:x[2]});
+});
+[["8:00","oito horas","🕗"],["9:00","nove horas","🕘"],["12:00","meio-dia","🕛"],
+ ["14:30","duas e meia","🕝"],["18:00","seis horas","🕕"],["21:00","nove horas","🕘"]
+].forEach(function(x){
+  passos6.push({t:"cartao",grupo:"Hora do remédio",grande:x[0],legenda:x[1],fala:x[1],pic:x[2]+" 💊"});
+});
+
+/* ---------- Lição 7: frases curtas e textos conhecidos (máx. 6 palavras) ---------- */
+var FRASES=[
+["Frases",["O sol é quente.","A casa é bonita.","O gato come peixe.","Eu gosto de café.","A água é boa."]],
+["Parabéns",["Parabéns pra você,","nesta data querida,","muitas felicidades,","muitos anos de vida."]],
+["Pai-Nosso",["Pai nosso, que estais no céu,","santificado seja o vosso nome;","venha a nós o vosso reino;","seja feita a vossa vontade,","assim na terra como no céu.",
+  "O pão nosso de cada dia","nos dai hoje;","perdoai-nos as nossas ofensas,","assim como nós perdoamos","a quem nos tem ofendido;",
+  "e não nos deixeis","cair em tentação,","mas livrai-nos do mal. Amém."]],
+["Ave-Maria",["Ave Maria, cheia de graça,","o Senhor é convosco.","Bendita sois vós entre as mulheres","e bendito é o fruto","do vosso ventre, Jesus.",
+  "Santa Maria, Mãe de Deus,","rogai por nós pecadores,","agora e na hora","de nossa morte. Amém."]]
+];
+var passos7=[];
+FRASES.forEach(function(g){
+  g[1].forEach(function(f){passos7.push({t:"frase",grupo:g[0],palavras:f.split(" ")});});
+});
+
 /* ---------- Lista de lições (a ordem aqui é a ordem na tela inicial) ---------- */
 var LICOES=[
- {id:"alfabeto",icone:"🔤",titulo:"Lição 1 · O alfabeto",desc:"Conhecer as letras de A a Z",passos:passos1,
+ {id:"alfabeto",icone:"🔤",curto:"Letras",passos:passos1,
   rotulo:function(p,i,n){return "Letra "+(i+1)+" de "+n;},
   tecla:function(k){var n=k.toUpperCase().charCodeAt(0)-65;return (n>=0&&n<26)?n:-1;}},
- {id:"silabas",icone:"🧩",titulo:"Lição 2 · Sílabas e palavras",desc:"Juntar consoante e vogal: BA BE BI BO BU",passos:passos2,
+ {id:"silabas",icone:"🧩",curto:"Sílabas",passos:passos2,
   rotulo:function(p,i,n){return "Letra "+p.c+" · "+(i+1)+" de "+n;},
-  tecla:function(k){k=k.toUpperCase();for(var j=0;j<passos2.length;j++){if(passos2[j].c===k)return j;}return -1;}}
+  tecla:function(k){k=k.toUpperCase();for(var j=0;j<passos2.length;j++){if(passos2[j].c===k)return j;}return -1;}},
+ {id:"nome",icone:"👪",curto:"Meu nome",gerar:gerarNomes,secreto:true,
+  rotulo:function(p,i,n){return "Nome "+(i+1)+" de "+n;}},
+ {id:"formar",icone:"🔗",curto:"Formar palavras",passos:passos4,
+  rotulo:function(p,i,n){return (i+1)+" de "+n;}},
+ {id:"diaadia",icone:"🏪",curto:"Dia a dia",passos:passos5,
+  rotulo:function(p,i,n){return (i+1)+" de "+n;}},
+ {id:"numeros",icone:"🔢",curto:"Números",passos:passos6,
+  rotulo:function(p,i,n){return p.grupo+" · "+(i+1)+"/"+n;}},
+ {id:"frases",icone:"💬",curto:"Frases",passos:passos7,
+  rotulo:function(p,i,n){return p.grupo+" · "+(i+1)+"/"+n;}}
 ];
 
 /* ================= código do app ================= */
@@ -156,8 +280,9 @@ var prog={};
 try{prog=JSON.parse(localStorage.getItem("prog")||"{}")||{};}catch(e){prog={};}
 function salvar(){try{localStorage.setItem("prog",JSON.stringify(prog));}catch(e){}}
 function achar(id){for(var k=0;k<LICOES.length;k++){if(LICOES[k].id===id)return LICOES[k];}return null;}
+function passosDe(l){return l.gerar?l.gerar():l.passos;}
 
-var lic=null,i=0;
+var lic=null,PS=[],i=0;
 
 /* ---------- voz (motor de voz nativo do Android, sem internet) ---------- */
 var PITCH=1;                       /* tom da voz (1 = normal) */
@@ -166,11 +291,9 @@ var VELNOME=["Muito lenta","Lenta","Média","Rápida","Normal"];
 var cfg={v:2};                     /* padrão: Média (0,8), mais pausada que o normal */
 try{var c0=JSON.parse(localStorage.getItem("cfg")||"{}");if(c0&&c0.v>=0&&c0.v<VEL.length)cfg.v=c0.v;}catch(e){}
 function salvarCfg(){try{localStorage.setItem("cfg",JSON.stringify(cfg));}catch(e){}}
-var LENTO=0.6;                     /* "Ouvir devagar" = velocidade atual x 0,6 */
+var LENTO=0.6;                     /* "Devagar" = velocidade atual x 0,6 */
 
-/* Pronúncia de sílabas soltas. O TTS costuma ler "be" ou "bo" de forma estranha.
-   Regra: a -> á, e -> ê, o -> ô (vogais abertas/fechadas como na escola).
-   Se uma sílaba ainda soar estranha no aparelho, corrija aqui. Ex.: FONETICA["ce"]="cê"; */
+/* Pronúncia de sílabas soltas: a -> á, e -> ê, o -> ô. Corrija aqui se alguma soar estranha. */
 var FONETICA={};
 function falaSilaba(sl){
   var k=sl.toLowerCase();
@@ -180,7 +303,6 @@ function falaSilaba(sl){
   return k;
 }
 
-var ultimo="";                     /* última frase falada (para "Ouvir devagar") */
 var MSG_SEM_VOZ="Sem voz em português. No Android: Configurações > Idioma > Saída de texto para voz > instalar a voz pt-BR.";
 function aviso(t){var m=$("msg");if(m)m.textContent=t||"";}
 
@@ -193,45 +315,89 @@ try{
   }
 }catch(e){TTS=null;}
 
-function falar(texto,lento){
-  var r=VEL[cfg.v], taxa=lento?Math.max(0.4,r*LENTO):r;
-  aviso("");
-  if(TTS){
-    TTS.speak({text:texto,lang:"pt-BR",rate:taxa,pitch:PITCH,volume:1.0,category:"ambient"})
-      .catch(function(err){aviso(MSG_SEM_VOZ);});
-    return;
-  }
-  if(!synth){aviso("Este aparelho não tem voz instalada.");return;}
-  synth.cancel();
-  var u=new SpeechSynthesisUtterance(texto);
-  u.lang="pt-BR"; u.rate=taxa; u.pitch=PITCH; u.volume=1;
-  var v=synth.getVoices().filter(function(x){return /pt[-_]BR/i.test(x.lang)})[0];
-  if(v) u.voice=v;
-  synth.speak(u);
+var vozId=0, seqId=0, repetir=null;
+
+/* fala um texto e devolve uma Promise que termina quando a fala acaba */
+function falarP(texto,taxa){
+  var meu=++vozId;
+  return new Promise(function(fim){
+    if(TTS){
+      var t0=Date.now();
+      TTS.speak({text:texto,lang:"pt-BR",rate:taxa,pitch:PITCH,volume:1.0,category:"ambient"})
+        .then(function(){
+          var gasto=Date.now()-t0;               /* se o plugin devolver cedo demais, espera um tempo estimado */
+          if(gasto<200)setTimeout(fim,300+texto.length*80/taxa-gasto); else fim();
+        })
+        .catch(function(){if(meu===vozId)aviso(MSG_SEM_VOZ);fim();});
+      return;
+    }
+    if(!synth){aviso("Este aparelho não tem voz instalada.");fim();return;}
+    synth.cancel();
+    var u=new SpeechSynthesisUtterance(texto);
+    u.lang="pt-BR"; u.rate=taxa; u.pitch=PITCH; u.volume=1;
+    var v=synth.getVoices().filter(function(x){return /pt[-_]BR/i.test(x.lang)})[0];
+    if(v) u.voice=v;
+    u.onend=function(){fim();}; u.onerror=function(){fim();};
+    synth.speak(u);
+  });
 }
-function dizer(t){ultimo=t;falar(t,false);}
+function taxaDe(lento){var r=VEL[cfg.v];return lento?Math.max(0.4,r*LENTO):r;}
+function falar(texto,lento){seqId++;aviso("");falarP(texto,taxaDe(lento));}
+function dizer(t){repetir=function(l){falar(t,l);};falar(t,false);}
+
+/* fala uma lista de itens {fala, ao} em ordem, chamando "ao" antes de cada um (para destacar) */
+function sequencia(itens,lento,fim){
+  var meu=++seqId, taxa=taxaDe(lento);
+  aviso("");
+  function passo(k){
+    if(meu!==seqId)return;
+    if(k>=itens.length){if(fim)fim();return;}
+    if(itens[k].ao)itens[k].ao();
+    falarP(itens[k].fala,taxa).then(function(){
+      setTimeout(function(){passo(k+1);},lento?500:250);
+    });
+  }
+  passo(0);
+}
 function parar(){
+  seqId++;vozId++;
   if(TTS){try{TTS.stop().catch(function(){});}catch(e){}}
   else if(synth)synth.cancel();
+}
+function limpa(w){return w.replace(/[.,;:!?]/g,"");}
+function semAcento(s){try{return s.normalize("NFD").replace(/[̀-ͯ]/g,"");}catch(e){return s;}}
+function nomeLetra(ch){var b=semAcento(ch).toUpperCase();return NOMES[b]||ch.toLowerCase();}
+function tam(len,fator,vh,total){return "font-size:min("+Math.min(30,(total||94)/(Math.max(len,1)*fator)).toFixed(1)+"vw,"+vh+"vh)";}
+function esc(t){return t.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+
+/* toque longo (para o cadastro escondido) */
+function pressionar(el,ms,fn){
+  if(!el)return;
+  var t=null;
+  function ini(){clearTimeout(t);t=setTimeout(function(){t=null;fn();},ms);}
+  function fim(){clearTimeout(t);t=null;}
+  el.addEventListener("pointerdown",ini);
+  ["pointerup","pointerleave","pointercancel"].forEach(function(e){el.addEventListener(e,fim);});
+  el.addEventListener("contextmenu",function(e){e.preventDefault();});
 }
 
 /* ---------- tela inicial ---------- */
 function home(){
   lic=null; parar();
-  var h='<div></div><div style="width:100%;display:flex;flex-direction:column;gap:12px;align-items:center">'+
+  var h='<div style="width:100%;display:flex;flex-direction:column;gap:4px;align-items:center">'+
         '<h1>📖 Aprender a Ler</h1><p class="sub">Escolha uma lição</p></div>'+
-        '<div class="lista">';
-  LICOES.forEach(function(l){
-    var n=l.passos.length, a=prog[l.id]||0;
-    var st=a>0?("Continuar: "+(a+1)+" de "+n):("Começar · "+n+" telas");
-    h+='<button type="button" class="licao" data-id="'+l.id+'"><span class="ic">'+l.icone+'</span>'+
-       '<span>'+l.titulo+'<small>'+l.desc+'<br>'+st+'</small></span></button>';
+        '<div class="grade2">';
+  LICOES.forEach(function(l,k){
+    var n=passosDe(l).length, a=prog[l.id]||0;
+    var st=(a>0&&!(l.secreto&&n<2&&passosDe(l)[0].t==="vazio"))?(" · "+(a+1)+"/"+n):"";
+    h+='<button type="button" class="licao'+(k===LICOES.length-1&&LICOES.length%2?' ':'')+'" data-id="'+l.id+'">'+
+       '<span class="ic">'+l.icone+'</span><span class="n">Lição '+(k+1)+st+'</span><span class="t">'+l.curto+'</span></button>';
   });
   h+='</div>'+
-     '<div class="cfg"><p class="dica">Velocidade da voz: <b id="vel"></b></p>'+
-     '<div class="row"><button type="button" id="vMenos" class="alt">− Mais lenta</button>'+
-     '<button type="button" id="vMais" class="alt">Mais rápida +</button></div>'+
-     '<button type="button" id="vTeste">🔊 Testar a voz</button></div>';
+     '<div class="cfg"><button type="button" id="vMenos" class="alt" aria-label="Mais lenta">−</button>'+
+     '<span>Velocidade da voz<b id="vel"></b></span>'+
+     '<button type="button" id="vMais" class="alt" aria-label="Mais rápida">+</button>'+
+     '<button type="button" id="vTeste" aria-label="Testar a voz">🔊</button></div>';
   app.innerHTML=h;
   function velTxt(){$("vel").textContent=VELNOME[cfg.v];}
   velTxt();
@@ -242,65 +408,181 @@ function home(){
   for(var k=0;k<bs.length;k++){bs[k].onclick=function(){location.hash="#l/"+this.getAttribute("data-id");};}
 }
 
+/* ---------- cadastro dos nomes (escondido: toque longo de 3 s no contador da lição "Meu nome") ---------- */
+function cadastro(){
+  lic=null; parar();
+  var atual=lerNomes().join("\n");
+  app.innerHTML=
+    '<div class="topo"><button type="button" id="bCancel" class="alt">◀ Cancelar</button><p class="count">Nomes da família</p></div>'+
+    '<div class="meio" style="justify-content:flex-start"><p class="dica">Escreva um nome por linha.<br>O primeiro nome é o dela.</p>'+
+    '<textarea id="txt" rows="7" maxlength="400" placeholder="Maria&#10;João&#10;Ana"></textarea></div>'+
+    '<div style="width:100%"><button type="button" id="bSalvar">Salvar</button></div>';
+  $("txt").value=atual;
+  $("bCancel").onclick=function(){history.back();};
+  $("bSalvar").onclick=function(){
+    var linhas=$("txt").value.split("\n").map(function(x){return x.replace(/\s+/g," ").trim();}).filter(function(x){return x;}).slice(0,12);
+    linhas=linhas.map(function(x){return x.slice(0,14);});
+    try{localStorage.setItem("nomes",JSON.stringify(linhas));}catch(e){}
+    prog.nome=0;salvar();
+    location.hash="#l/nome";
+  };
+}
+
 /* ---------- tela de uma lição ---------- */
 function abrir(l){
-  lic=l;
-  var s=prog[l.id]||0; i=(s>=0&&s<l.passos.length)?s:0;
+  lic=l; PS=passosDe(l);
+  var s=prog[l.id]||0; i=(s>=0&&s<PS.length)?s:0;
   mostrar();
 }
-function mostrar(){
-  var p=lic.passos[i], n=lic.passos.length, meio="";
+
+/* devolve a descrição da tela do passo p */
+function desenhar(p){
+  var d={meio:"",a:null,b:null,ligar:null,nav:true,extra:null};
+  var cc;
   if(p.t==="letra"){
-    meio='<p class="letter">'+p.c+' '+p.c.toLowerCase()+'</p><p class="pic">'+p.emoji+'</p>'+
-         '<p class="word"><b>'+p.palavra.charAt(0)+'</b>'+p.palavra.slice(1)+'</p>';
+    var tl="A letra "+NOMES[p.c]+". "+p.c.toLowerCase()+" de "+p.palavra;
+    d.meio='<p class="letter">'+p.c+' '+p.c.toLowerCase()+'</p><p class="pic">'+p.emoji+'</p>'+
+           '<p class="word"><b>'+p.palavra.charAt(0)+'</b>'+p.palavra.slice(1)+'</p>';
+    d.a='🔊 Ouvir a letra'; d.b='🔊 Palavra';
+    d.ligar=function(){
+      $("bA").onclick=function(){dizer(tl);};
+      $("bB").onclick=function(){dizer(p.palavra);};
+      repetir=function(l){falar(tl,l);};
+    };
   }else if(p.t==="silabas"){
-    meio='<p class="dica">Toque para ouvir</p><div class="grade">';
-    p.sil.forEach(function(s,k){meio+='<button type="button" data-s="'+k+'">'+s+'</button>';});
-    meio+='</div>';
+    var todas=p.sil.map(falaSilaba).join(", ");
+    d.meio='<p class="dica">Toque para ouvir</p><div class="grade">'+
+           p.sil.map(function(s,k){return '<button type="button" data-s="'+k+'">'+s+'</button>';}).join("")+'</div>';
+    d.a='🔊 Ouvir todas';
+    d.ligar=function(){
+      $("bA").onclick=function(){dizer(todas);};
+      var gs=app.querySelectorAll(".grade button");
+      for(var k=0;k<gs.length;k++){gs[k].onclick=function(){dizer(falaSilaba(p.sil[+this.getAttribute("data-s")]));};}
+      repetir=function(l){falar(todas,l);};
+    };
   }else if(p.t==="palavra"){
-    var cc=p.c.toLowerCase();
+    cc=p.c.toLowerCase();
     var h=p.sil.map(function(s){return s.charAt(0).toLowerCase()===cc?'<b>'+s+'</b>':s;}).join("-");
-    meio='<p class="pic">'+p.emoji+'</p><p class="sil">'+h+'</p>';
+    var ts=p.sil.map(falaSilaba).join(", ");
+    d.meio='<p class="pic">'+p.emoji+'</p><p class="sil">'+h+'</p>';
+    d.a='🔊 Ouvir as sílabas'; d.b='🔊 Palavra';
+    d.ligar=function(){
+      $("bA").onclick=function(){dizer(ts);};
+      $("bB").onclick=function(){dizer(p.palavra);};
+      repetir=function(l){falar(ts,l);};
+    };
+  }else if(p.t==="juntar"){
+    var tsj=p.sil.map(falaSilaba).join(", ");
+    d.meio='<p class="dica">'+p.grupo+'</p><p class="pic">'+p.emoji+'</p>'+
+           '<p class="sil" id="jt" style="'+tam(p.palavra.length+p.sil.length,0.72,9,90)+'">'+p.sil.map(function(s,k){return '<span class="sb" data-s="'+k+'">'+s.toUpperCase()+'</span>';}).join("")+'</p>'+
+           '<p class="dica">Toque em cada pedaço. Depois toque em Juntar.</p>';
+    d.a='🧩 Juntar'; d.b='🔊 Palavra';
+    d.ligar=function(){
+      var jt=$("jt"), junto=false;
+      var sbs=jt.querySelectorAll(".sb");
+      for(var k=0;k<sbs.length;k++){sbs[k].onclick=function(){dizer(falaSilaba(p.sil[+this.getAttribute("data-s")]));};}
+      $("bA").onclick=function(){
+        junto=!junto;
+        jt.className=junto?"sil un":"sil";
+        this.textContent=junto?"↩ Separar":"🧩 Juntar";
+        if(junto)dizer(p.palavra); else dizer(tsj);
+      };
+      $("bB").onclick=function(){dizer(p.palavra);};
+      repetir=function(l){falar(junto?p.palavra:tsj,l);};
+    };
+  }else if(p.t==="cartao"){
+    var gr=p.grande, f=p.fala||p.grande;
+    var estilo=p.placa?tam(gr.length,0.9,12,68):tam(gr.length,0.65,16);
+    d.meio=(p.grupo?'<p class="dica">'+p.grupo+'</p>':'')+
+           (p.pic?'<p class="pic'+(p.pq?' pq':'')+'">'+p.pic+'</p>':'')+
+           (p.placa?'<div class="placa"><span class="grande" style="'+estilo+'">'+esc(gr)+'</span></div>'
+                   :'<p class="grande" style="'+estilo+'">'+esc(gr)+'</p>')+
+           (p.legenda?'<p class="leg">'+esc(p.legenda)+'</p>':'');
+    d.a='🔊 Ouvir';
+    d.ligar=function(){
+      $("bA").onclick=function(){dizer(f);};
+      repetir=function(l){falar(f,l);};
+    };
+  }else if(p.t==="nome"){
+    var letras=p.nome.toUpperCase().split("");
+    d.meio='<p class="nm" id="nm" style="'+tam(letras.length,0.8,16)+'">'+
+           letras.map(function(ch,k){return '<span data-k="'+k+'">'+(ch===" "?"&nbsp;":esc(ch))+'</span>';}).join("")+'</p>'+
+           '<p class="nm2">'+esc(p.nome.charAt(0).toUpperCase()+p.nome.slice(1).toLowerCase())+'</p>';
+    d.a='🔊 Soletrar'; d.b='🔊 Nome';
+    d.ligar=function(){
+      var sp=$("nm").querySelectorAll("span");
+      function marca(k){for(var q=0;q<sp.length;q++){sp[q].className=(k===-1?"on":(q===k?"on":""));}}
+      function soletrar(l){
+        var it=[];
+        letras.forEach(function(ch,k){if(ch!==" "&&ch!=="-")it.push({fala:nomeLetra(ch),ao:function(){marca(k);}});});
+        it.push({fala:p.nome.toLowerCase(),ao:function(){marca(-1);}});
+        sequencia(it,l,function(){marca(-2);});
+      }
+      $("bA").onclick=function(){repetir=soletrar;soletrar(false);};
+      $("bB").onclick=function(){marca(-2);dizer(p.nome.toLowerCase());};
+      repetir=soletrar;
+    };
+  }else if(p.t==="vazio"){
+    d.meio='<p class="pic">👪</p><p class="dica" style="font-size:22px">Ainda não há nomes cadastrados.</p>'+
+           '<p class="dica">Peça a alguém da família: segure o título "Meu nome", no alto da tela, por 3 segundos.</p>';
+    d.nav=false;
+  }else if(p.t==="frase"){
+    var pals=p.palavras;
+    d.meio='<p class="dica">'+p.grupo+'</p><div class="fr" id="fr">'+
+           pals.map(function(w,k){return '<span class="pal" data-k="'+k+'">'+esc(w)+'</span>';}).join("")+'</div>'+
+           '<p class="dica">Toque numa palavra para ouvi-la.</p>';
+    d.a='🔊 Ouvir lendo'; d.b='🔊 Frase';
+    d.ligar=function(){
+      var sp=$("fr").querySelectorAll(".pal");
+      function marca(k){for(var q=0;q<sp.length;q++){sp[q].className="pal"+(q===k?" on":"");}}
+      function ler(l){
+        sequencia(pals.map(function(w,k){return {fala:limpa(w),ao:function(){marca(k);}};}),l,function(){marca(-1);});
+      }
+      for(var k=0;k<sp.length;k++){sp[k].onclick=function(){var q=+this.getAttribute("data-k");marca(q);dizer(limpa(pals[q]));};}
+      $("bA").onclick=function(){repetir=ler;ler(false);};
+      $("bB").onclick=function(){marca(-1);dizer(limpa(pals.join(" ")));};
+      repetir=ler;
+    };
   }
-  var b1,b2;
-  if(p.t==="letra"){b1='🔊 Ouvir a letra';b2='🔊 Palavra';}
-  else if(p.t==="silabas"){b1='🔊 Ouvir todas';b2=null;}
-  else{b1='🔊 Ouvir as sílabas';b2='🔊 Palavra';}
-  ultimo="";
+  return d;
+}
+
+function mostrar(){
+  parar();
+  var p=PS[i], n=PS.length, d=desenhar(p);
+  repetir=null;
+  var rot=p.t==="vazio"?lic.curto:lic.rotulo(p,i,n);
+  var baixo="";
+  if(d.a){
+    baixo+='<button id="bA" type="button">'+d.a+'</button>'+
+           '<div class="row row2">'+(d.b?'<button id="bB" type="button" class="alt">'+d.b+'</button>':'')+
+           '<button id="bSlow" type="button" class="alt">🐢 Devagar</button></div>';
+  }
+  if(d.nav){
+    baixo+='<div class="row"><button id="bPrev" type="button" class="alt">◀ Voltar</button><button id="bNext" type="button">Próxima ▶</button></div>';
+  }
   app.innerHTML=
-    '<div class="topo"><button type="button" id="bHome" class="alt">◀ Início</button><p class="count" id="count">'+lic.rotulo(p,i,n)+'</p></div>'+
-    '<div class="meio">'+meio+'<p id="msg"></p></div>'+
-    '<div style="width:100%;display:flex;flex-direction:column;gap:16px">'+
-      '<button id="bA" type="button">'+b1+'</button>'+
-      '<div class="row row2">'+(b2?'<button id="bB" type="button" class="alt">'+b2+'</button>':'')+
-        '<button id="bSlow" type="button" class="alt">🐢 Devagar</button></div>'+
-      '<div class="row"><button id="bPrev" type="button" class="alt">◀ Voltar</button><button id="bNext" type="button">Próxima ▶</button></div>'+
-    '</div>';
+    '<div class="topo"><button type="button" id="bHome" class="alt">◀ Início</button><p class="count" id="count">'+rot+'</p></div>'+
+    '<div class="meio">'+d.meio+'<p id="msg"></p></div>'+
+    '<div style="width:100%;display:flex;flex-direction:column;gap:'+(d.a?'16px':'0')+'">'+baixo+'</div>';
   prog[lic.id]=i; salvar();
   $("bHome").onclick=function(){location.hash="";};
-  $("bPrev").onclick=function(){i=(i-1+n)%n;parar();mostrar();};
-  $("bNext").onclick=function(){i=(i+1)%n;parar();mostrar();};
-  var padrao;
-  if(p.t==="letra"){
-    padrao="A letra "+NOMES[p.c]+". "+p.c.toLowerCase()+" de "+p.palavra;
-    $("bA").onclick=function(){dizer(padrao);};
-    $("bB").onclick=function(){dizer(p.palavra);};
-  }else if(p.t==="silabas"){
-    padrao=p.sil.map(falaSilaba).join(", ");
-    $("bA").onclick=function(){dizer(padrao);};
-    var gs=app.querySelectorAll(".grade button");
-    for(var k=0;k<gs.length;k++){gs[k].onclick=function(){dizer(falaSilaba(p.sil[+this.getAttribute("data-s")]));};}
-  }else{
-    padrao=p.sil.map(falaSilaba).join(", ");
-    $("bA").onclick=function(){dizer(padrao);};
-    $("bB").onclick=function(){dizer(p.palavra);};
+  if(d.nav){
+    $("bPrev").onclick=function(){i=(i-1+n)%n;mostrar();};
+    $("bNext").onclick=function(){i=(i+1)%n;mostrar();};
   }
-  $("bSlow").onclick=function(){falar(ultimo||padrao,true);};
+  if(d.ligar)d.ligar();
+  if($("bSlow")){
+    $("bSlow").onclick=function(){if(repetir)repetir(true);else $("bA").click();};
+  }
+  if(lic.secreto){pressionar($("count"),3000,function(){location.hash="#cadastro";});}
 }
 
 /* ---------- rotas (o botão Voltar do Android usa isto) ---------- */
 function rota(){
-  var m=/^#l\/(.+)$/.exec(location.hash||"");
+  var h=location.hash||"";
+  if(h==="#cadastro"){cadastro();return;}
+  var m=/^#l\/(.+)$/.exec(h);
   var l=m?achar(m[1]):null;
   if(l)abrir(l); else home();
 }
@@ -309,14 +591,14 @@ window.addEventListener("hashchange",rota);
 /* ---------- teclado físico ---------- */
 document.addEventListener("keydown",function(e){
   if(e.ctrlKey||e.altKey||e.metaKey||!lic) return;
-  var k=e.key, n=lic.passos.length;
+  var k=e.key;
   if(/^[a-zA-Z]$/.test(k)){
     var j=lic.tecla?lic.tecla(k):-1;
     if(j>=0){i=j;mostrar();$("bA").click();}
-  }else if(k==="ArrowRight"){$("bNext").click();}
-  else if(k==="ArrowLeft"){$("bPrev").click();}
-  else if(k==="Enter"){e.preventDefault();$("bA").click();}
-  else if(k===" "){e.preventDefault();var b=$("bB")||$("bA");b.click();}
+  }else if(k==="ArrowRight"&&$("bNext")){$("bNext").click();}
+  else if(k==="ArrowLeft"&&$("bPrev")){$("bPrev").click();}
+  else if(k==="Enter"&&$("bA")){e.preventDefault();$("bA").click();}
+  else if(k===" "&&$("bA")){e.preventDefault();($("bB")||$("bA")).click();}
   else if(k==="Escape"){location.hash="";}
 });
 if(synth&&synth.onvoiceschanged!==undefined){synth.onvoiceschanged=function(){};}
