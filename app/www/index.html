@@ -182,9 +182,12 @@ SILABAS.forEach(function(g){
 });
 
 /* ---------- Lição 3: meu nome (dinâmica: nomes cadastrados no aparelho) ---------- */
+var NOMES_PADRAO=["Ereneu","Irineu","Antonio","Margarida","Maria","Mira","Mario","Juary","Kelly","Manuel","Miguel","Rosa","Antonia","Joana",
+  "Leidy","Arany","Edmar","Paulo","Debora","Juliana","Daniel","Daisy","Helen","José","Amilton","Pedro","Gina"];
+/* Já vem com a lista da família. Para mudar: toque longo de 3 s no título da lição. Se a lista salva ficar vazia, volta esta. */
 function lerNomes(){
   try{var a=JSON.parse(localStorage.getItem("nomes")||"[]");if(a&&a.length)return a;}catch(e){}
-  return [];
+  return NOMES_PADRAO.slice();
 }
 function gerarNomes(){
   var a=lerNomes();
@@ -415,12 +418,12 @@ function cadastro(){
   app.innerHTML=
     '<div class="topo"><button type="button" id="bCancel" class="alt">◀ Cancelar</button><p class="count">Nomes da família</p></div>'+
     '<div class="meio" style="justify-content:flex-start"><p class="dica">Escreva um nome por linha.<br>O primeiro nome é o dela.</p>'+
-    '<textarea id="txt" rows="7" maxlength="400" placeholder="Maria&#10;João&#10;Ana"></textarea></div>'+
+    '<textarea id="txt" rows="7" maxlength="800" placeholder="Maria&#10;João&#10;Ana"></textarea></div>'+
     '<div style="width:100%"><button type="button" id="bSalvar">Salvar</button></div>';
   $("txt").value=atual;
   $("bCancel").onclick=function(){history.back();};
   $("bSalvar").onclick=function(){
-    var linhas=$("txt").value.split("\n").map(function(x){return x.replace(/\s+/g," ").trim();}).filter(function(x){return x;}).slice(0,12);
+    var linhas=$("txt").value.split("\n").map(function(x){return x.replace(/\s+/g," ").trim();}).filter(function(x){return x;}).slice(0,40);
     linhas=linhas.map(function(x){return x.slice(0,14);});
     try{localStorage.setItem("nomes",JSON.stringify(linhas));}catch(e){}
     prog.nome=0;salvar();
