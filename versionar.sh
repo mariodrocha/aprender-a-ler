@@ -72,7 +72,7 @@ if [ ! -d .git ]; then
   git init -q -b main 2>/dev/null || { git init -q && git checkout -q -b main; }
 fi
 git add -A
-git commit -q -m "v$nova: $resumo"
+git commit -q -m "v$nova: $resumo" -m "Co-Authored-By: Claude <noreply@anthropic.com>"
 git tag -a "v$nova" -m "Versão $nova: $resumo"
 
 echo
