@@ -9,7 +9,7 @@ docker run --rm \
   -v "$PWD/chave":/root/.android \
   -v aprender-gradle:/root/.gradle \
   -v aprender-npm:/root/.npm \
-  -e HOST_UID="$(id -u)" -e HOST_GID="$(id -g)" \
+  -e HOST_UID="${SUDO_UID:-$(id -u)}" -e HOST_GID="${SUDO_GID:-$(id -g)}" \
   aprender-apk-builder bash /projeto/docker/build-apk.sh
 echo
 echo "PRONTO! Versão $(tr -d '[:space:]' < VERSION)"

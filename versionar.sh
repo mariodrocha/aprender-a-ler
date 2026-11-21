@@ -30,6 +30,16 @@ if ! git config user.name >/dev/null || ! git config user.email >/dev/null; then
   exit 1
 fi
 
+# confere ANTES de mexer em qualquer arquivo (evita deixar a versão pela metade)
+for alvo in . app app/www VERSION CHANGELOG.md app/package.json app/www/index.html; do
+  if [ ! -w "$alvo" ]; then
+    echo "ERRO: sem permissão de escrita em: $PWD/$alvo"
+    echo "Provavelmente o build foi rodado com sudo e deixou arquivos do root. Corrija com:"
+    echo "  sudo chown -R \"\$USER\":\"\$USER\" \"$PWD\""
+    exit 1
+  fi
+done
+
 atual="$(tr -d '[:space:]' < VERSION)"
 IFS=. read -r ma mi pa <<< "$atual"
 case "$tipo" in

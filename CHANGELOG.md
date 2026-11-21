@@ -6,6 +6,10 @@ Para criar uma versão nova: `bash versionar.sh <patch|minor|major> "o que mudou
 
 <!-- NOVAS-VERSOES-AQUI -->
 
+## [1.6.3] - 2026-11-21
+
+- scripts(construir e versionar) corrigidos
+
 ## [1.6.2] - 2026-11-21
 
 - README vira a apresentação do projeto; comandos em COMO-USAR.md
