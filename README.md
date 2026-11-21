@@ -1,6 +1,7 @@
 # Aprender a Ler – build do APK via Docker
 
 App Android de alfabetização (letras, sílabas, nomes, palavras, números e frases).
+Descrição completa do projeto (objetivo, critérios pedagógicos, interface, ferramentas): veja [`PROJETO.md`](PROJETO.md).
 Interface: `app/www/index.html` · Empacotado com Capacitor · Voz: motor de voz do Android (pt-BR).
 
 ## Comandos do dia a dia
@@ -57,6 +58,7 @@ Os commits estão no nome "Claude"; para usar o seu, configure com
 ```
 VERSION             versão atual
 CHANGELOG.md        histórico do que mudou em cada versão
+PROJETO.md          descrição do projeto (objetivo, pedagogia, interface, ferramentas)
 versionar.sh        cria uma versão nova (número + changelog + commit + tag)
 construir.sh        gera o APK (usa Docker)
 limpar.sh           remove imagem e caches do Docker

@@ -6,6 +6,10 @@ Para criar uma versão nova: `bash versionar.sh <patch|minor|major> "o que mudou
 
 <!-- NOVAS-VERSOES-AQUI -->
 
+## [1.6.1] - 2026-11-21
+
+- Adiciona PROJETO.md com a descrição completa do projeto
+
 ## [1.6.0] - 2026-11-21
 
 - Controle de versão: arquivo `VERSION`, este `CHANGELOG.md` e o script `versionar.sh` (sobe o número, registra aqui, faz commit e cria a tag).
