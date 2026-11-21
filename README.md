@@ -1,71 +1,81 @@
-# Aprender a Ler – build do APK via Docker
+# 📖 Aprender a Ler
 
-App Android de alfabetização (letras, sílabas, nomes, palavras, números e frases).
-Descrição completa do projeto (objetivo, critérios pedagógicos, interface, ferramentas): veja [`PROJETO.md`](PROJETO.md).
-Interface: `app/www/index.html` · Empacotado com Capacitor · Voz: motor de voz do Android (pt-BR).
+Aplicativo Android de alfabetização para **adultos e idosos que estão aprendendo a ler**, feito para ser usado
+sozinho, no ritmo de cada pessoa, **sem internet e sem pressão**.
 
-## Comandos do dia a dia
+## Sobre o projeto
 
-| O que | Comando |
+Muitos aplicativos de alfabetização são pensados para crianças ou funcionam como jogos, com cronômetro, pontos,
+vidas e ranking. Para um adulto ou idoso que começa tarde, esse formato pode gerar ansiedade e falta de identificação.
+
+O **Aprender a Ler** nasceu de um caso real: apoiar uma pessoa da família na alfabetização usando um celular Android
+antigo, de tela pequena. O foco é reconhecer letras, juntar sílabas, ler palavras e frases curtas e, principalmente,
+reconhecer **o que importa na vida dela**: o próprio nome, o nome dos filhos e netos, placas, preços, horas do remédio
+e orações que já sabe de cor.
+
+**O app não é:** um jogo (sem pontos, fases ou cronômetro), uma avaliação (não existe resposta "errada"), um substituto do professor, nem outros serviços online (sem internet, anúncios, conta ou coleta de dados).
+
+## Lições
+
+Ate a esta versão são 7 lições e 207 telas. Cada tela mostra uma coisa por vez, com figura e voz.
+
+| # | Lição | O que a pessoa faz |
+|---|---|---|
+| 1 | **Letras** | Vê a letra maiúscula e minúscula, a figura e a palavra; ouve o nome da letra |
+| 2 | **Sílabas** | Toca em BA BE BI BO BU e ouve cada sílaba; depois lê palavras com aquela consoante |
+| 3 | **Meu nome** | Vê o nome em letras gigantes e ouve soletrar, letra por letra, com destaque |
+| 4 | **Formar palavras** | Toca nas sílabas soltas (BO, LA) e em "Juntar" para ver e ouvir a palavra (BOLA) |
+| 5 | **Dia a dia** | Lê palavras em quadros que lembram placas: MERCADO, FARMÁCIA, SAÍDA, BANHEIRO |
+| 6 | **Números** | Dígitos, preços com figura ("R$ 5,00" → "cinco reais") e horas do remédio |
+| 7 | **Frases** | Lê frases curtas, Parabéns, Pai-Nosso e Ave-Maria, com destaque palavra por palavra |
+
+A lista de nomes da Lição 3 já vem preenchida e pode ser editada por um familiar (cadastro escondido, para a pessoa
+que aprende não apagar sem querer).
+
+## Princípios
+
+- **Uma tela, uma coisa por vez**, sem pressão, sem pontos e sem erro.
+- **Começar pelo que tem significado:** o próprio nome vem logo depois das sílabas.
+- **Som e imagem sempre juntos**, com voz ajustável e botão "🐢 Devagar".
+- **Botões grandes e alto contraste**, sempre no mesmo lugar, com tema claro e escuro.
+- **Funciona sem internet:** os dados ficam só no aparelho.
+
+Os critérios pedagógicos e de interface estão explicados em [`PROJETO.md`](PROJETO.md).
+São princípios adotados no projeto, **ainda não validados em estudo formal**.
+
+## Tecnologias
+
+HTML, CSS e JavaScript (um único arquivo) · [Capacitor](https://capacitorjs.com/) para gerar o app Android ·
+plugin [`text-to-speech`](https://github.com/capacitor-community/text-to-speech) para falar com o motor de voz do
+próprio Android · Docker para gerar o APK sem instalar Java ou Android SDK · Git com versionamento semântico.
+
+## Começar rápido
+
+Com o Docker instalado e em execução, na pasta do projeto:
+
+```
+bash construir.sh
+```
+
+O APK sai em `saida/aprender-a-ler-vX.Y.Z.apk`. Passe o arquivo para o celular e instale. O celular precisa ter a voz de **português (Brasil)** instalada (Configurações > Idioma > Saída de texto para voz).
+
+Todos os comandos, o fluxo de versões e o envio ao git estão em [`COMO-USAR.md`](COMO-USAR.md).
+
+## Documentação
+
+| Arquivo | Conteúdo |
 |---|---|
-| Gerar o APK | `bash construir.sh` → `saida/aprender-a-ler-vX.Y.Z.apk` |
-| Criar uma versão nova | `bash versionar.sh <patch\|minor\|major> "o que mudou"` |
-| Limpar o Docker | `bash limpar.sh` |
+| [`PROJETO.md`](PROJETO.md) | Descrição completa: objetivo, critérios pedagógicos, interface, ferramentas, evolução e limitações |
+| [`COMO-USAR.md`](COMO-USAR.md) | Como gerar o APK, criar versões e enviar ao git |
+| [`CHANGELOG.md`](CHANGELOG.md) | O que mudou em cada versão |
+| [`VERSION`](VERSION) | Versão atual |
 
-## Versionamento
+## Estado do projeto
 
-A versão fica no arquivo `VERSION` (ex.: `1.6.0`) e segue **MAJOR.MINOR.PATCH**:
+Sete lições implementadas, com o layout verificado automaticamente em três tamanhos de celular.
+Falta a **validação prática com a pessoa que vai aprender**, que deve orientar as próximas versões.
+A qualidade da voz depende do aparelho.
 
-- **patch**: correção ou ajuste pequeno (1.6.0 → 1.6.1)
-- **minor**: lição ou recurso novo (1.6.0 → 1.7.0)
-- **major**: mudança grande (1.6.0 → 2.0.0)
+## Licença
 
-Fluxo para cada alteração:
-
-1. Faça a mudança (por exemplo, troque o `app/www/index.html`).
-2. `bash versionar.sh minor "Lição 8: cores"`. O script faz tudo sozinho:
-   sobe o `VERSION`, atualiza `app/package.json` e a constante `VERSAO` do app,
-   acrescenta a entrada no `CHANGELOG.md`, faz o **commit** e cria a **tag** `vX.Y.Z`.
-3. `bash construir.sh` gera o APK dessa versão. O número aparece na tela inicial do app
-   e no Android (versionName/versionCode), e o APK novo atualiza o antigo.
-4. `git push origin main --follow-tags` envia para o git.
-
-Para ver o histórico: `git log --oneline --decorate` e o `CHANGELOG.md`.
-Para voltar a uma versão antiga: `git checkout v1.4.0` (e `git checkout main` para retornar).
-
-## Enviar para o git (primeira vez)
-
-Crie um repositório **vazio** no GitHub/GitLab (de preferência **privado**) e rode na pasta do projeto:
-
-```
-git remote add origin https://github.com/SEU-USUARIO/aprender-a-ler.git
-git push -u origin main --follow-tags
-```
-
-Este projeto já vem com o histórico das versões 1.0.0 a 1.6.0 como commits e tags.
-Os commits estão no nome "Claude"; para usar o seu, configure com
-`git config --global user.name "Seu Nome"` e `git config --global user.email "seu@email.com"`
-(vale para os commits novos).
-
-## O que NÃO vai para o git (ver `.gitignore`)
-
-- `chave/`: chave de assinatura do app. **Faça backup à parte, em local privado.**
-  Com ela, o APK novo atualiza o antigo no celular sem desinstalar. Se perder, é preciso desinstalar o app antes.
-- `saida/` (APKs), `app/node_modules/` e `app/android/`: são gerados pelo build.
-
-## Estrutura
-
-```
-VERSION             versão atual
-CHANGELOG.md        histórico do que mudou em cada versão
-PROJETO.md          descrição do projeto (objetivo, pedagogia, interface, ferramentas)
-versionar.sh        cria uma versão nova (número + changelog + commit + tag)
-construir.sh        gera o APK (usa Docker)
-limpar.sh           remove imagem e caches do Docker
-Dockerfile          Node 20 + Java 17 + Android SDK
-docker/build-apk.sh roda dentro do container
-app/www/index.html  toda a interface e as lições
-app/package.json    Capacitor e plugin de voz
-```
-
-Como adicionar uma lição: veja o comentário no topo do `<script>` do `app/www/index.html`.
+A definir depois.
