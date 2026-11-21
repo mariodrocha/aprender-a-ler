@@ -64,6 +64,7 @@ button.alt{background:var(--btn2);color:var(--bg)}
 /* ----- tela inicial (compacta) ----- */
 h1{font-size:clamp(24px,7vw,34px);text-align:center}
 .sub{font-size:17px;text-align:center}
+.sub small{font-size:12px}
 .grade2{width:100%;display:grid;grid-template-columns:1fr 1fr;gap:10px}
 button.licao{
   display:flex;flex-direction:column;align-items:center;justify-content:center;
@@ -275,6 +276,9 @@ var LICOES=[
   rotulo:function(p,i,n){return p.grupo+" · "+(i+1)+"/"+n;}}
 ];
 
+/* Versão do app. NÃO edite à mão: o script versionar.sh atualiza esta linha. */
+var VERSAO="1.6.0";
+
 /* ================= código do app ================= */
 var $=function(id){return document.getElementById(id)};
 var app=$("app");
@@ -388,7 +392,7 @@ function pressionar(el,ms,fn){
 function home(){
   lic=null; parar();
   var h='<div style="width:100%;display:flex;flex-direction:column;gap:4px;align-items:center">'+
-        '<h1>📖 Aprender a Ler</h1><p class="sub">Escolha uma lição</p></div>'+
+        '<h1>📖 Aprender a Ler</h1><p class="sub">Escolha uma lição <small>v'+VERSAO+'</small></p></div>'+
         '<div class="grade2">';
   LICOES.forEach(function(l,k){
     var n=passosDe(l).length, a=prog[l.id]||0;

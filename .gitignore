@@ -1,5 +1,12 @@
+# gerado pelo build
 app/node_modules/
-app/android/build/
-app/android/.gradle/
-app/android/app/build/
+app/android/
 saida/
+
+# NÃO versionar: chave de assinatura do app (faça backup à parte, em local privado)
+chave/
+
+# sistema
+.DS_Store
+Thumbs.db
+*.bak

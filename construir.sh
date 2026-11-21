@@ -12,4 +12,5 @@ docker run --rm \
   -e HOST_UID="$(id -u)" -e HOST_GID="$(id -g)" \
   aprender-apk-builder bash /projeto/docker/build-apk.sh
 echo
-echo "PRONTO! APK em: $PWD/saida/aprender-a-ler.apk"
+echo "PRONTO! Versão $(tr -d '[:space:]' < VERSION)"
+echo "APK em: $PWD/saida/aprender-a-ler-v$(tr -d '[:space:]' < VERSION).apk"
