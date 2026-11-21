@@ -6,6 +6,10 @@ Para criar uma versão nova: `bash versionar.sh <patch|minor|major> "o que mudou
 
 <!-- NOVAS-VERSOES-AQUI -->
 
+## [1.6.4] - 2026-11-21
+
+- Add MIT license
+
 ## [1.6.3] - 2026-11-21
 
 - scripts(construir e versionar) corrigidos

@@ -1,6 +1,6 @@
 {
   "name": "aprender-a-ler",
-  "version": "1.6.3",
+  "version": "1.6.4",
   "private": true,
   "dependencies": {
     "@capacitor/android": "^6.2.0",
