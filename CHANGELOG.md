@@ -6,6 +6,10 @@ Para criar uma versão nova: `bash versionar.sh <patch|minor|major> "o que mudou
 
 <!-- NOVAS-VERSOES-AQUI -->
 
+## [1.6.6] - 2026-11-22
+
+- Corrige botões que saíam da tela em números e preços
+
 ## [1.6.5] - 2026-11-21
 
 - Add Co-Authored

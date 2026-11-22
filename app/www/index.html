@@ -44,7 +44,8 @@ p{margin:0}
   letter-spacing:.02em; text-align:center; white-space:nowrap; max-width:100%;
 }
 .pic{font-size:clamp(56px,min(20vw,11vh),110px);line-height:1;text-align:center}
-.pic.pq{font-size:clamp(30px,min(9vw,6vh),46px);line-height:1.15;white-space:pre-line}
+.pic.pq{font-size:clamp(24px,min(8vw,5vh),40px);line-height:1.15;white-space:pre-line}
+.pic.pm{font-size:clamp(44px,min(14vw,8vh),80px)}
 .word{font-size:clamp(40px,min(13vw,8vh),80px);white-space:nowrap;font-weight:bold;text-align:center}
 .word b{color:var(--hl)}
 button{
@@ -80,15 +81,20 @@ button.licao .t{font-size:18px}
 
 /* ----- dentro das lições ----- */
 .topo{width:100%;display:flex;align-items:center;justify-content:space-between;gap:12px}
-.topo button{width:auto;min-height:52px;font-size:20px;padding:0 18px;border-radius:16px}
-.meio{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;width:100%}
+.topo button{width:auto;min-height:52px;font-size:20px;padding:0 18px;border-radius:16px;white-space:nowrap;flex-shrink:0}
+.topo .count{min-width:0}
+.meio{flex:1;min-height:0;overflow-y:auto;display:flex;flex-direction:column;align-items:center;gap:12px;width:100%}
+.meio>*{flex-shrink:0}
+.meio>:first-child{margin-top:auto}
+.meio>:last-child{margin-bottom:auto}
+main.fix{height:100%;min-height:0}
 .grade{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;width:100%}
 .grade button{min-height:clamp(64px,12vh,96px);font-size:clamp(34px,min(12vw,7vh),60px)}
 .sil{font-size:clamp(44px,min(15vw,9vh),90px);font-weight:bold;text-align:center;white-space:nowrap}
 .sil b{color:var(--hl)}
 .dica{font-size:18px;text-align:center}
 .grande{font-weight:bold;text-align:center;white-space:nowrap;line-height:1.05}
-.leg{font-size:clamp(26px,8vw,40px);text-align:center}
+.leg{font-size:clamp(18px,min(6.5vw,4.2vh),34px);text-align:center}
 .placa{border:6px solid var(--line);border-radius:16px;padding:14px 18px;font-weight:bold;text-align:center;white-space:nowrap;max-width:100%}
 .nm{font-weight:bold;text-align:center;white-space:nowrap}
 .nm span{display:inline-block;padding:0 .04em;border-radius:8px}
@@ -111,6 +117,14 @@ textarea{
   .count{font-size:18px}
 }
 @media (max-height:600px){
+  .meio{gap:6px}
+  .dica{font-size:15px}
+  .letter{font-size:clamp(64px,min(26vw,16vh),200px)}
+  .pic{font-size:clamp(40px,min(16vw,9vh),90px)}
+  .pic.pm{font-size:clamp(36px,min(12vw,7vh),70px)}
+  .word{font-size:clamp(32px,min(12vw,7vh),70px)}
+  .sil{font-size:clamp(34px,min(13vw,8vh),80px)}
+  .pal{font-size:clamp(26px,min(8.5vw,5.5vh),44px)}
   button.licao{min-height:62px}
   button.licao .ic{font-size:24px}
   h1{font-size:22px}
@@ -238,7 +252,7 @@ for(var dg=0;dg<10;dg++){
 [["8:00","oito horas","🕗"],["9:00","nove horas","🕘"],["12:00","meio-dia","🕛"],
  ["14:30","duas e meia","🕝"],["18:00","seis horas","🕕"],["21:00","nove horas","🕘"]
 ].forEach(function(x){
-  passos6.push({t:"cartao",grupo:"Hora do remédio",grande:x[0],legenda:x[1],fala:x[1],pic:x[2]+" 💊"});
+  passos6.push({t:"cartao",grupo:"Hora do remédio",rot:"Horas",grande:x[0],legenda:x[1],fala:x[1],pic:x[2]+" 💊"});
 });
 
 /* ---------- Lição 7: frases curtas e textos conhecidos (máx. 6 palavras) ---------- */
@@ -271,13 +285,13 @@ var LICOES=[
  {id:"diaadia",icone:"🏪",curto:"Dia a dia",passos:passos5,
   rotulo:function(p,i,n){return (i+1)+" de "+n;}},
  {id:"numeros",icone:"🔢",curto:"Números",passos:passos6,
-  rotulo:function(p,i,n){return p.grupo+" · "+(i+1)+"/"+n;}},
+  rotulo:function(p,i,n){return (p.rot||p.grupo)+" · "+(i+1)+"/"+n;}},
  {id:"frases",icone:"💬",curto:"Frases",passos:passos7,
   rotulo:function(p,i,n){return p.grupo+" · "+(i+1)+"/"+n;}}
 ];
 
 /* Versão do app. NÃO edite à mão: o script versionar.sh atualiza esta linha. */
-var VERSAO="1.6.5";
+var VERSAO="1.6.6";
 
 /* ================= código do app ================= */
 var $=function(id){return document.getElementById(id)};
@@ -390,7 +404,7 @@ function pressionar(el,ms,fn){
 
 /* ---------- tela inicial ---------- */
 function home(){
-  lic=null; parar();
+  lic=null; parar(); app.className="";
   var h='<div style="width:100%;display:flex;flex-direction:column;gap:4px;align-items:center">'+
         '<h1>📖 Aprender a Ler</h1><p class="sub">Escolha uma lição <small>v'+VERSAO+'</small></p></div>'+
         '<div class="grade2">';
@@ -417,7 +431,7 @@ function home(){
 
 /* ---------- cadastro dos nomes (escondido: toque longo de 3 s no contador da lição "Meu nome") ---------- */
 function cadastro(){
-  lic=null; parar();
+  lic=null; parar(); app.className="";
   var atual=lerNomes().join("\n");
   app.innerHTML=
     '<div class="topo"><button type="button" id="bCancel" class="alt">◀ Cancelar</button><p class="count">Nomes da família</p></div>'+
@@ -499,9 +513,9 @@ function desenhar(p){
     };
   }else if(p.t==="cartao"){
     var gr=p.grande, f=p.fala||p.grande;
-    var estilo=p.placa?tam(gr.length,0.9,12,68):tam(gr.length,0.65,16);
+    var estilo=p.placa?tam(gr.length,0.9,12,68):tam(gr.length,0.65,11);
     d.meio=(p.grupo?'<p class="dica">'+p.grupo+'</p>':'')+
-           (p.pic?'<p class="pic'+(p.pq?' pq':'')+'">'+p.pic+'</p>':'')+
+           (p.pic?'<p class="pic'+(p.pq?' pq':' pm')+'">'+p.pic+'</p>':'')+
            (p.placa?'<div class="placa"><span class="grande" style="'+estilo+'">'+esc(gr)+'</span></div>'
                    :'<p class="grande" style="'+estilo+'">'+esc(gr)+'</p>')+
            (p.legenda?'<p class="leg">'+esc(p.legenda)+'</p>':'');
@@ -558,6 +572,7 @@ function mostrar(){
   parar();
   var p=PS[i], n=PS.length, d=desenhar(p);
   repetir=null;
+  app.className="fix";
   var rot=p.t==="vazio"?lic.curto:lic.rotulo(p,i,n);
   var baixo="";
   if(d.a){
